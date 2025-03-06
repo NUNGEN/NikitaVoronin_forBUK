@@ -1,4 +1,4 @@
-import emsine as emsineFail
+import esimene as esimeneFail
 import teine as teineFail
 from pykkar import *
 userInput = input("Miline ülesanne sa tahan ülevaadata")
