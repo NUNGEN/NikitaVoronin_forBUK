@@ -1,7 +1,7 @@
 import random
 from abc import ABC, abstractmethod
 
-# 1. Абстрактный класс Человек
+
 class Person(ABC):
     def init(self, name, strength):
         self.name = name
@@ -11,7 +11,7 @@ class Person(ABC):
     def speak(self):
         pass
 
-# 2. Класс Крестьянин
+
 class Peasant(Person):
     def init(self, name, strength):
         super().init(name, strength)
@@ -20,7 +20,7 @@ class Peasant(Person):
     def speak(self):
         print(f"{self.name}: *молчит по-крестьянски*")
 
-# 3. Класс Гладиатор
+
 class Gladiator(Person):
     def init(self, name, strength):
         super().init(name, strength)
@@ -44,7 +44,7 @@ class Gladiator(Person):
         for p in self.legion:
             p.strength += 2
 
-# 4. Создание деревень
+
 def create_village(name_prefix, count):
     return [Peasant(f"{name_prefix}_{i+1}", random.randint(1, 5)) for i in range(count)]
 
@@ -54,7 +54,7 @@ villages = [
     create_village("деревня3", random.randint(3, 5)),
 ]
 
-# 5. Гладиатор идет по деревням
+
 gladiator = Gladiator("Максимус", 7)
 
 for village in villages:
