@@ -1,52 +1,65 @@
-import random
-
 class Level:
-    def __init__(self, player_on_each_level, player_amount):
-        self.player_on_each_level == player_amount
-        self.player_amount == 2
-        levels = (range("level_1", "level_5"))
-["level_1", "level_2", "level_3", "level_4", "level_5",]
-    def (self, player_on_each_level, death, player_amount, minimum_ammount_of_recources)
-        self.minimum_ammount_of_recources = (8)
-        if minimum_ammount_of_recources < 8
-            print("Level is gone")
-        else:
-            print("Still alive")
-   
-class platform(self, level, resourse_ammount, method_of_obtainment, method_of_resource_transfer):           
-    def __init__(self):
-            self.resourse_ammount = ["100"]
-            self.method_of_obtainment = method_of_obtainment
-            self.method_of_resource_transfer = method_of_resource_transfer
-            self.exact_amount = exact_amount
-            self.level_change = level_change
-        for level_change in range(levels):
-            print(f"Current level {level_change}")
-        
-    def ResourceChange(self,):
-        if resource_ammount <= (100 * 0,32):
-            print(f"{resource_ammount} Change is done")
-        else:
-            print("Resources are hold")
-#       self.
-#   print("-------Level has changed--------")
-    
-    
-class Playerok(self,level):
-    def __init__(self, players, player_choice, death):
-        self.players = [player_1, player_2, player_3, player_4, player_5, player_6, player_7, player_8, player_9, player_10]
-        self.player_choice = player_choice
-        self.player_choice_is_to_transfer = player_choice_is_to_transfer
-        self.player_choice_is_to_hold = player_choice_is_to_hold
-        self.death = death(minimum_ammount_of_recources)
-        self.life = life(minimum_ammount_of_recources)
-    def choice(self, platform, resourse_ammount, player_choice)
-        if randint(player_choice_is_to_transfer,player_choice_is_to_transfer) is True:
-            print(f"Player choose to {player_choice_is_to_transfer}, {player_choice_is_to_transfer}")
-        else:
-            print(f"the consiquence is {death} , {live}")
-            
+    def __init__(self, name, initial_resources, min_resources=8):
+        self.name = name
+        self.resources = initial_resources
+        self.min_resources = min_resources
+        self.alive = True  # Можно оставить, но он не меняется здесь
 
-    
-#    def player_transfer()
+    def receive_resources(self, amount):
+        self.resources += amount
+        print(f"{self.name} received {amount} resources. Total: {self.resources}")
+
+    def act(self, next_level):
+        if not self.alive:
+            return
+
+        print(f"{self.name} -- Resources: {self.resources}")
+        print("Choose action:")
+        print("1: Keep all")
+        print("2: Share half (10% waste)")
+        print("3: Send all (10% waste)")
+        
+        choice = input("Your choice (1, 2, 3): ")
+
+        if choice == "1":
+            print(f"{self.name} keeps all resources.")
+        elif choice == "2":
+            share = self.resources // 2
+            self.resources -= share
+            lost = int(share * 0.1)
+            transfer_amount = share - lost
+            print(f"{self.name} shares half. Lost: {lost}. Sent: {transfer_amount}")
+            if next_level:
+                next_level.receive_resources(transfer_amount)
+        elif choice == "3":
+            lost = int(self.resources * 0.1)
+            transfer_amount = self.resources - lost
+            print(f"{self.name} sends all. Lost: {lost}. Sent: {transfer_amount}")
+            self.resources = 0
+            if next_level:
+                next_level.receive_resources(transfer_amount)
+        else:
+            print("Invalid input. No action taken.")
+
+class Game:
+    def __init__(self, num_levels=5, initial_resources=100):
+        self.levels = [
+            Level(f"Level {i + 1}", initial_resources if i == 0 else 0)
+            for i in range(num_levels)
+        ]
+
+    def play_one_round(self):
+        print("Game started")
+        for i in range(len(self.levels)):
+            current_level = self.levels[i]
+            next_level = self.levels[i + 1] if i + 1 < len(self.levels) else None
+            current_level.act(next_level)
+
+            if next_level and next_level.resources < next_level.min_resources:
+                print(f"Game over: Next level {next_level.name} has not enough resources.")
+                break
+            
+if __name__ == "__main__":
+    game = Game()
+    game.play_one_round()
         
