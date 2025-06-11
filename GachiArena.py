@@ -1,7 +1,6 @@
 import random
 from abc import ABC, abstractmethod
 
-# Абстрактный класс Человек
 class Person(ABC):
     def __init__(self, name, strength):
         self.name = name
@@ -11,88 +10,89 @@ class Person(ABC):
     def speak(self):
         pass
 
-# Класс Крестьянин
 class Peasant(Person):
     def __init__(self, name, strength):
         super().__init__(name, strength)
         self.ready_to_join = random.choice([True, False])
 
     def speak(self):
-        print(f"{self.name}: Я простой крестьянин...")
+        print(f"{self.name}: I'm just a humble peasant")
 
-# Класс Гладиатор
 class Gladiator(Person):
     def __init__(self, name, strength):
         super().__init__(name, strength)
         self.legion = []
 
     def speak(self):
-        print(f"{self.name}: За Рим!")
+        print(f"{self.name}: For the Legion!")
 
     def recruit(self, peasant):
-        if len(self.legion) >= 10:
-            print("Легион полон. Нельзя завербовать больше.")
+        if len(self.legion) >= 8:
+            print("The legion is full. Trying to replace a weaker member")
+            self.replace_weaker(peasant)
             return
-        if peasant.ready_to_join and self.strength > 5:
-            print(f"{peasant.name} присоединился к легиону.")
+        if peasant.ready_to_join and self.strength > 5 and peasant.strength > 5:
+            print(f"{peasant.name} has joined the legion.")
             self.legion.append(peasant)
         else:
-            print(f"{peasant.name} отказался или слишком слаб.")
+            print(f"{peasant.name} refused or is too weak.")
+
+    def replace_weaker(self, new_peasant):
+        for member in self.legion:
+            if new_peasant.strength > member.strength:
+                print(f"Replacing {member.name} with {new_peasant.name}.")
+                self.legion.remove(member)
+                self.legion.append(new_peasant)
+                return
+        print(f"{new_peasant.name} is not stronger than anyone in the legion.")
 
     def show_legion(self):
-        print("\n=== Легион Максимуса ===")
+        print("\nLegion")
         if not self.legion:
-            print("Легион пуст.")
+            print("The legion is empty.")
         for member in self.legion:
-            print(f"- {member.name}, сила: {member.strength}")
+            print(f"- {member.name}, strength: {member.strength}")
 
     def train_legion(self):
-        print("\nТренировка легиона...")
+        print("\nTraining the legion...")
         for member in self.legion:
             member.strength += 2
 
-# Функция создания деревни
 def create_village(name, count):
     villagers = []
     for i in range(count):
-        villager_name = f"{name}_крестьянин{i+1}"
+        villager_name = f"{name}_peasant{i+1}"
         strength = random.randint(1, 10)
         villagers.append(Peasant(villager_name, strength))
     hostile = random.choice([True, False])
     return {"name": name, "villagers": villagers, "hostile": hostile}
 
-# Создание деревень
 villages = [
-    create_village("Гачиваново", random.randint(3, 5)),
-    create_village("Стыдливые Холмы", random.randint(3, 5)),
-    create_village("Азафур", random.randint(3, 5)),
-    create_village("Праховка", random.randint(3, 5)),
+    create_village("Gachivanovo", random.randint(5, 10)),
+    create_village("Shy Hills", random.randint(5, 10)),
+    create_village("Azafur", random.randint(5, 10)),
+    create_village("Ashiel", random.randint(5, 10)),
+    create_village("Neverland", random.randint(5, 10)),
+    create_village("Tunguska", random.randint(5, 10)),
+    create_village("Serodile", random.randint(5, 10)),
 ]
 
-# Гладиатор
-gladiator = Gladiator("Максимус", 7)
+gladiator = Gladiator("Maximus", 7)
 
-# Путешествие по деревням
 for village in villages:
-    print(f"\n== Деревня: {village['name']} ==")
+    print(f"\nVillage: {village['name']}")
     if village["hostile"]:
-        print("Деревня враждебна! Максимус уходит дальше.")
+        print("The village is hostile! Maximus moves on.")
         continue
     else:
-        print("Деревня мирная. Попытка вербовки...")
+        print("The village is peaceful. Attempting recruitment.")
         for villager in village["villagers"]:
             villager.speak()
             gladiator.recruit(villager)
 
-# Показ легиона
 gladiator.show_legion()
-
-# Тренировка
 gladiator.train_legion()
-
-# Повторный показ после тренировки
 gladiator.show_legion()
-
         
 #Абстра́ктный ме́тод (или чистый виртуальный метод (pure virtual method — часто неверно переводится как чисто виртуальный метод)) — в объектно-ориентированном программировании,
 #метод класса, реализация для которого отсутствует. Класс,
